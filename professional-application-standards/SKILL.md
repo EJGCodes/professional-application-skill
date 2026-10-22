@@ -1,18 +1,20 @@
 ---
 name: professional-application-standards
-description: Design, UX, writing, accessibility, legal, security and performance standards for building, editing or reviewing any website, web app or software application. Use whenever creating or changing an application's interface, content or backend, including landing pages, dashboards, SaaS products, admin tools, desktop and mobile apps, even if the user does not mention standards or quality. Does not apply to in-game UIs.
+description: Design, UX, writing, accessibility, SEO, legal, security, sign-in and performance standards for building, editing or reviewing any website, web app or software application. Use whenever creating or changing an application's interface, content, accounts or backend, including landing pages, dashboards, SaaS products, admin tools, desktop and mobile apps, even if the user does not mention standards or quality. Does not apply to in-game UIs.
+metadata:
+  version: 1.1.0
 ---
 
 # Professional Application Standards
 
-These rules keep applications professional, secure and clean, and avoid the common pitfalls of AI-built sites. Apply them to every website, web application or software application you build, edit or review.
+These rules keep applications professional, secure and clean, and avoid the common pitfalls of AI-built sites. Apply them to every website, web application or software application you build, edit or review. Each section states the key rules; the reference files hold the full details and must be read where indicated.
 
 ## How to Apply This Skill
 
 ### Precedence
 1. Explicit user instructions come first. When a request conflicts with a rule, mention the conflict once, then follow the user.
 2. This skill comes second.
-3. Any other design guidance (general frontend or artifact design skills) comes third. Where it suggests something this skill bans (such as subtle shadows or eyebrow labels), this skill wins.
+3. Any other design guidance (general frontend or artifact design skills) comes third. Where it suggests something this skill bans, this skill wins.
 
 ### Scope
 - Applies to every type of web or software application: websites, web apps, desktop apps and mobile apps.
@@ -34,36 +36,29 @@ Never add a feature only to satisfy a rule. A static page with no data collectio
 
 ### Native and Desktop Applications
 - Skip rules tagged **[Web]**.
-- Follow the intent of every other rule through the platform's equivalent:
-  - Native animation APIs instead of CSS transforms.
-  - The OS keychain or platform secure storage instead of HttpOnly cookies.
-  - Platform accessibility APIs instead of ARIA.
-  - Platform text layout controls instead of `text-wrap`.
-  - Platform tools for verification (see `references/testing-tools.md`).
+- Follow the intent of every other rule through the platform's equivalent: native animation APIs instead of CSS transforms, the OS keychain instead of HttpOnly cookies, platform accessibility APIs instead of ARIA, platform text layout controls instead of `text-wrap`, a settings screen instead of an `/account` page, and each platform's native provider sign-in flow.
+- Verify with the platform tools in `references/testing-tools.md`.
 
 ### Creative Applications
-- Creative applications are those whose main purpose is art, design, media, games, entertainment or personal expression. If unclear, ask.
-- Several rules differ for creative applications (icon set, 404 tone, session length).
+Creative applications are those whose main purpose is art, design, media, games, entertainment or personal expression. If unclear, ask. Several rules differ for them (icon set, 404 tone, session length).
 
 ### Platform Limits
-- Some environments cannot support every rule (for example, a single-file HTML page has no server for security headers or a sitemap).
-- Never fake compliance. Implement the closest version the platform allows.
-- List every applicable rule that could not be implemented, and why, in the delivery summary.
+- Some environments cannot support every rule (for example, a single-file HTML page has no server for headers or a sitemap).
+- Never fake compliance. Implement the closest version the platform allows, and list what could not be implemented in the delivery summary.
 
-### Frontend Choice
-Leave the frontend choice open unless the user specifies one. Recommend:
-- **Next.js, SvelteKit or Nuxt** for apps with accounts or a backend. All three support secure cookie-based Supabase sessions.
-- **Astro** for content-focused public sites.
-
-When the app has accounts, recommend a frontend with a server layer. If the user chooses a pure client-side frontend anyway, follow the client-side auth rules in `references/supabase-security.md` and note the tradeoff in the delivery summary.
+### Frontend and Hosting
+- Leave the frontend choice open unless the user specifies one, with one requirement: **[Web] [Public]** public pages must be server-rendered or statically generated, so search engines and social preview bots can read them. A client-only app is allowed only for pages behind login.
+- Recommend **Next.js, SvelteKit or Nuxt** for apps with accounts or a backend, and **Astro** for content-focused public sites.
+- When the app has accounts and the user still chooses a client-only frontend, follow the client-side rules in `references/security.md` and note the tradeoff in the delivery summary.
+- **[Web]** Host on Vercel unless the user specifies otherwise. Always write the header, redirect and clean URL configuration for whichever host is used.
 
 ### Project Start
 At the start of a new project, ask the builder (together with any other setup questions):
-- The details needed for legal pages (see Section 10).
+- The details needed for legal pages (listed in `references/legal-and-privacy.md`).
 - Whether the application is creative, if unclear.
 - Which frontend to use, if unclear, with the recommendations above.
 
-If the builder does not answer the legal questions, build with labeled placeholder fields and ask again after the first build is done.
+If the builder does not answer the legal questions, build with labeled placeholder fields and ask again after the first build is done. Never ask for personal information about team members.
 
 ### Existing Projects
 - Apply every rule to anything new you build or change.
@@ -78,10 +73,19 @@ Each rule lives in one section. Other sections cross-reference it instead of rep
 
 ### Reference Files
 Read each file at the moment it is needed:
-- `references/fonts.md`: before choosing any font.
-- `references/supabase-security.md`: before building any backend, authentication, session or data storage.
-- `references/testing-tools.md`: before testing performance, accessibility or security.
-- `references/verification-checklist.md`: before delivering any build.
+
+| File | Read before |
+|---|---|
+| `references/fonts.md` | Choosing any font |
+| `references/writing.md` | Writing any content, labels, messages or emails |
+| `references/ux-patterns.md` | Building loading states, interactions, notices or flows |
+| `references/forms-and-data.md` | Building any form, input, data display or database schema |
+| `references/accounts-and-onboarding.md` | Building sign-up, sign-in, onboarding or account pages |
+| `references/legal-and-privacy.md` | Building legal pages, cookie consent, deletion, messaging or analytics |
+| `references/security.md` | Building any backend, authentication, session or data storage |
+| `references/web-developer-checklist.md` | Building any [Web] project |
+| `references/testing-tools.md` | Testing performance, accessibility or security |
+| `references/verification-checklist.md` | Delivering any build |
 
 ### Verification
 - Before delivering, run every applicable check in `references/verification-checklist.md`.
@@ -92,14 +96,16 @@ End every build with a summary using these headings. Omit any heading with nothi
 - **Not implemented**: applicable rules the platform could not support, and why.
 - **Unverified checks**: checks that could not be run.
 - **Open legal fields**: placeholder fields the builder still needs to complete, with a recommendation for legal review before launch.
+- **Open content placeholders**: marked content (such as "[Customer quote]") that must be replaced before launch.
+- **Builder launch tasks**: every applicable task from `references/web-developer-checklist.md`.
 - **Security issues needing attention**: audit or scan findings that could not be fixed.
 - **Existing violations**: rule breaks in code you did not write, with a recommendation to fix them.
-- **Notes**: anything else the builder needs to know, such as assets loaded from a permitted external source.
+- **Notes**: anything else the builder needs to know.
 
 ## 1. Color and Visual Style
 
 ### Musts
-- Use only one primary accent color. Differentiate with shades of that color for theming instead of introducing a second color (unless specified).
+- Use only one primary accent color. Differentiate with shades of that color instead of introducing a second color (unless specified).
 - Neutrals (black, white, grays) and semantic status colors (error, success, warning) are allowed and do not count as a second color. Charts use shades of the accent first.
 - If the user provides brand colors, use them. Otherwise, create original brand colors. Never copy colors from another similar brand.
 - Maintain clean color contrast throughout (targets in Section 9).
@@ -113,7 +119,7 @@ End every build with a summary using these headings. Omit any heading with nothi
 ### Don'ts
 - No shadows of any kind: no box-shadow, text-shadow or drop-shadow filters, including subtle ones.
 - No highlighter pills: no colored rounded backgrounds behind words in headings or body text.
-- No decorative pills or badges that exist purely for show.
+- No decorative pills or badges that exist purely for show, including a chip that only holds step text (such as "Step 2 of 4").
 - No gradients or gradient blobs, liquid glass, radial orbs, dot grids or grain textures.
 - No colored left strips on any element, including cards, alerts, callouts, list items, navigation indicators and blockquotes. Show an active nav item with a tonal background shade, text color or weight instead.
 - No dark or hidden patterns in backgrounds.
@@ -123,22 +129,22 @@ End every build with a summary using these headings. Omit any heading with nothi
 ### Musts
 - Use one main typeface (two maximum, only if necessary).
 - Before choosing a font, read `references/fonts.md`. Use a font from its Approved list, a font the user specifies, or a font that passes every one of its criteria.
-- Self-host font files where the platform allows (see Section 12).
+- Self-host font files where the platform allows.
 - Establish a clear type (font size) hierarchy for all necessary elements.
 - Keep text in clean contrast with the elements it sits in, so it stays visible wherever it is placed.
-- **[Web]** Apply `text-wrap: balance` to headings and `text-wrap: pretty` to paragraphs to prevent stranded single words.
+- **[Web]** Apply `text-wrap: balance` to headings and `text-wrap: pretty` to paragraphs, with fallbacks where unsupported.
 
 ### Do's
-- Use monospace only to display actual code, never as a UI or display font.
+- Use monospace only for actual code and for codes, keys and IDs the user must read or copy (recovery codes, API keys, order IDs). Never as a UI or display font.
 - Use italics only for titles of works, foreign terms and quotations.
 - Place text under a heading only when it gives the user valuable information they cannot get anywhere else on the page.
 
 ### Don'ts
-- Do not use Monospace (as a UI or display font), Inter, Geist or Space Grotesk, or any lookalike listed in `references/fonts.md`.
-- Do not rely on the system UI font stack (`system-ui`, `-apple-system`) as the chosen typeface. It may appear only as a fallback.
+- Do not use Inter, Geist, Space Grotesk, monospace as a UI font, or any lookalike listed in `references/fonts.md`.
+- Do not rely on the system UI font stack as the chosen typeface. It may appear only as a fallback.
 - No double-accented phrases: at most one word per title may differ in color, size or rotation. This is optional, never a default.
-- No headings followed by unnecessary explanations or summaries (such as a title followed by medium or small text, shrunken type or small badges).
-- No eyebrow labels (small text or badges above a heading).
+- No headings followed by unnecessary explanations or summaries.
+- No eyebrow labels (small text or badges above a heading). Step counts belong inside the progress component.
 - No italics for emphasis.
 - No orphan words: never separate words out of normal text for emphasis, never split a headline into separate lines word by word, and never leave a single word stranded on the last line of a heading or paragraph.
 
@@ -146,16 +152,15 @@ End every build with a summary using these headings. Omit any heading with nothi
 
 ### Musts
 - All elements (text and non-text) must resize with device screen size and window resizing.
-- Use percentages and other relative units (`%`, `fr`, `rem`, `clamp()`, viewport units) wherever they make sense, so layouts hold at any window or screen size. Reserve fixed pixel values for borders, hairlines and minimum tap targets.
-- Keep spacing consistent across the entire application.
-- Align elements of the same type with each other.
+- Use percentages and other relative units (`%`, `fr`, `rem`, `clamp()`, viewport units) wherever they make sense. Reserve fixed pixel values for borders, hairlines and minimum tap targets.
+- Keep spacing consistent across the entire application, and align elements of the same type.
 - Handle long text cleanly on window resize and across platforms so the layout holds.
-- When an input is focused on a device with an onscreen keyboard, scroll it into view so the keyboard sits below it and never covers it. Fixed or sticky bottom elements must not overlap the focused input.
+- When an input is focused on a device with an onscreen keyboard, scroll it into view so the keyboard sits below it and never covers it. Fixed or sticky elements must not overlap the focused input.
 - Keyboard handling must not cause major layout shift or change element formatting. The page adjusts its scroll position only.
-- Convert table rows to cards on mobile and on narrow window sizes. Cards keep the same structure as the table: the same fields, in the same order, labeled with the table's column headers.
+- Convert table rows to cards on mobile and on narrow window sizes. Cards keep the same fields, in the same order, labeled with the table's column headers.
 
 ### Do's
-- Limit dead space and make proper use of the available screen space. Dead space means empty areas with no purpose, such as oversized hero padding, empty columns on wide screens, or sections stretched to fill the viewport. Normal spacing between elements is not dead space.
+- Limit dead space: empty areas with no purpose, such as oversized hero padding, empty columns on wide screens, or sections stretched to fill the viewport. Normal spacing between elements is not dead space.
 - Keep table rows industry-standard with short content.
 - Verify layouts at 320, 375, 768, 1024, 1440 and 1920 pixel widths, plus continuous resizing between them.
 
@@ -166,22 +171,20 @@ End every build with a summary using these headings. Omit any heading with nothi
 ## 4. Icons, Images and Media
 
 ### Musts
-- Use only Material Symbols or Font Awesome for icons:
-  - **Material Symbols** for professional websites and applications.
-  - **Font Awesome** for creative applications.
-- Use one icon set per project. Never mix sets.
+- Use only Material Symbols (professional websites and applications) or Font Awesome (creative applications) for icons. One icon set per project.
+- Official brand logos are the one exception: use them wherever they represent a third-party service (sign-in buttons, social links), always preferring the brand's official assets over icon-set versions.
 - Keep icons consistent across all pages and with the favicon.
 - Use only images and media the user provides, or unlicensed (free-to-use, no paid license required) stock images and media when none are provided. This covers photos, illustrations, video, audio and any other media.
 - When no approved image or media exists, use a neutral, clearly marked placeholder rather than an unrelated substitute.
-- Charts must display real data. Choose the chart type that fits the data and style it with shades of the accent color.
+- Charts must display real data, in the chart type that fits the data, styled with shades of the accent color.
+- Compress all images and media following `references/web-developer-checklist.md` (including converting animated GIFs), and give every image and video `width` and `height` attributes.
+- Video includes a poster image and captions.
 
 ### Do's
-- Compress images and large media while preserving quality: use WebP or AVIF, serve responsive sizes with `srcset`, and lazy-load anything below the fold.
-- Self-host icon fonts or SVGs where the platform allows (see Section 12).
-- **[Public]** Add a social preview image to public sites and sites that include public user content. Skip it for internal tools and login-only apps.
+- **[Public]** Add a social preview image (see Section 8).
 
 ### Don'ts
-- No emojis as icons, and no icons from any set other than Material Symbols or Font Awesome (this rules out Lucide, Feather, Heroicons and similar sets).
+- No emojis as icons, and no icons from any other set (this rules out Lucide, Feather, Heroicons and similar sets).
 - No pulsing circle icon for dates, and no other meaningless icons.
 - No non-approved images or media from outside sources, especially licensed ones.
 - No AI-generated images or media unless the user requests them.
@@ -191,251 +194,201 @@ End every build with a summary using these headings. Omit any heading with nothi
 
 ## 5. Motion, Loading and Interaction
 
+Before building loading states, interactions, notices or flows, read `references/ux-patterns.md`.
+
 ### Musts
 - Animate movement and scaling with CSS `transform`, and fades with `opacity`. Simple color transitions are allowed. JavaScript is only a helper, never the main source of an animation.
-- Respect the user's reduced-motion setting (`prefers-reduced-motion`) by removing or minimizing non-essential motion.
+- Respect the user's reduced-motion setting by removing or minimizing non-essential motion.
 - Prevent buttons from being double-clicked and creating duplicate actions. (IMPORTANT)
-- Handle actions in this order:
-  1. Update the UI immediately (optimistic update).
-  2. Lock the control while the request runs.
-  3. Send an idempotency key so the server rejects duplicates.
-  4. If the server refuses, roll back the UI and show a clear message (see Section 7).
-- Payments, deletions and other irreversible actions wait for the server before updating the UI. They never update optimistically.
-- Backspace deletes one character at a time in every field, including masked phone, date and similar formatted fields. It never clears a whole field.
-- In chip or tag inputs, backspace removes only one chip at a time. It never removes all chips in the field.
-- Skeletons and all other loaders must work properly with the page content:
-  - Skeletons match the dimensions of the content they replace, so nothing shifts when content arrives.
-  - Loaders appear only while something is loading and are replaced by the content or a clear error message when loading ends. They are never left running.
-  - Loaders never block interaction with content that has already loaded.
+- Handle actions in this order: update the UI immediately, lock the control while the request runs, send an idempotency key so the server rejects duplicates, and roll back with a clear message if the server refuses.
+- Payments, deletions and other irreversible actions wait for the server before updating the UI.
+- Backspace deletes one character at a time in every field, including masked and formatted fields. In chip or tag inputs, it removes only one chip at a time.
+- Skeletons match the dimensions of the content they replace, loaders end when loading ends, and loaders never block content that has already loaded.
+- Use only the loaders, user-error safeguards and notice types defined in `references/ux-patterns.md`.
 
 ### Do's
-- Use these loaders:
-  - Skeleton screens for loading content. Keep every element responsive while loading.
-  - A simple circular spinner inside a button for short actions.
-  - A determinate progress bar for measurable progress, such as uploads or multi-step forms.
-- Add tap and click animations that respond at every state: hover, active/pressed, focus-visible, disabled and loading.
-- Account for user error in every interaction:
-  - Minimum tap targets of 44×44 px.
-  - A short delay before hover menus close.
-  - Invisible triangles (safe zones) that keep submenus open while the pointer moves toward them.
-  - Undo for destructive actions where possible, and confirmation for irreversible ones.
-  - Warnings before leaving a page with unsaved changes, and saved drafts for long forms.
-  - User input preserved when a submission fails.
-  - Tolerant input parsing (for example, accept phone numbers with or without spaces, dashes or parentheses).
+- Add tap and click animations for every state: hover, active/pressed, focus-visible, disabled and loading.
+- Minimum tap targets of 44×44 px. Links inside running text are exempt.
 
 ### Don'ts
 - No looping arrow loading indicator.
-- Never add a thin bar or line at the top of the page, or anything similar, for any purpose. This includes scroll progress and page navigation loading.
-- No dark or hidden UX patterns, including:
-  - Pre-checked opt-in boxes.
-  - Confirmshaming (such as "No thanks, I don't like saving money").
-  - Hidden or hard-to-find cancel, unsubscribe or account deletion options.
-  - Fake urgency, countdowns or scarcity.
-  - Visually weaker "reject" or "decline" buttons.
-  - Trick questions and double negatives.
-  - Items or add-ons sneaked into a cart.
-  - Ads disguised as content or navigation.
-- No other harmful or unnecessary UX, including:
-  - Popups, newsletter modals or permission prompts on page load. The only exception is the cookie consent banner (Section 10), which appears as a non-blocking bar at the bottom of the screen, never a modal, and never covers a focused input.
-  - Auto-playing media with sound.
-  - Forced account creation just to browse.
-  - Disabled paste in any field, including passwords.
-  - Scroll-jacking.
-  - Infinite scroll that makes the footer unreachable.
+- Never add a thin bar or line along the top edge of the page for any purpose, including scroll progress and page navigation loading.
+- No dark or hidden UX patterns, and no harmful or unnecessary UX, as listed in `references/ux-patterns.md`.
+- No popups, modals or prompts on page load. The only exceptions are the notices defined in `references/ux-patterns.md`.
 
 ## 6. Forms and Input
 
+Before building any form, input or data display, read `references/forms-and-data.md`.
+
 ### Musts
-- Validate each field when the user leaves it. Once an error shows, re-check live as the user types to fix it. Never show errors on fields the user hasn't touched.
-- Password fields validate on every keystroke, with the requirement checklist shown underneath and each item updating as it is met.
-- Provide a show/hide toggle on password fields.
-- Use the correct `type`, `inputmode` and `autocomplete` attributes on every field, so the right mobile keyboard appears and password managers can fill fields.
-- Input and textarea text is never smaller than 16px (smaller text makes iPhones zoom the page on focus).
+- Follow the input reference table for `type`, `inputmode`, `autocomplete` and `enterkeyhint` on every field. Never use `type="number"` for digit-only values that aren't quantities.
+- Every field has a visible label. Placeholder text never replaces a label.
+- Input and textarea text is never smaller than 16px.
+- Accept every correct way a user might type a value (such as phone numbers with dashes, spaces, dots, parentheses around the area code, or a country code), then normalize it on the server.
+- Validate each field when the user leaves it, then re-check live while the user fixes an error. Never show errors on untouched fields.
+- Password fields validate on every keystroke, with the requirement checklist shown underneath, and have a show/hide toggle. Requirements are in `references/accounts-and-onboarding.md`.
 - Search results appear 300 ms after the last keypress. Pressing Enter searches immediately and cancels any pending delayed search.
-- **[Accounts]** Include an age field on sign-up and enforce a minimum age. If the application handles possibly sensitive data, use a full birthday field instead.
-  - The minimum age follows the regions the builder gives in the legal questions (some regions set the age of digital consent at up to 16). Default to 13 only when no region is known.
-  - Sensitive data includes health, financial, precise location, government ID, and anything involving minors.
-- **[Uploads]** Enforce a file size limit (10 MB per file unless specified).
-- **[Uploads]** Check file format and size in the browser for fast feedback, then check again on the server to block dangerous files.
+- Use the native date input for simple dates. Custom pickers only for ranges or bookings, fully keyboard and screen reader accessible.
+- **[Accounts]** Collect age (or a full birthday for apps handling sensitive data) at sign-up, and enforce a minimum age based on the builder's regions (13 when unknown). Sensitive data includes health, financial, precise location, government ID, and anything involving minors.
+- **[Uploads]** Enforce a file size limit (10 MB per file unless specified), and check file format and size in the browser and again on the server.
 
 ## 7. Writing and Content
 
-See "Writing Rule Scope" above for where these rules apply.
+Before writing any content, labels, messages or emails, read `references/writing.md`.
 
 ### Musts
 - All content must be truthful about the site.
-- Every call to action and instruction must tell the user exactly what to do or what happens next (for example, "Create account," "Download the report," "Book a 30-minute call").
-- Every info and error message must say what happened and the specific next step, in plain language. Any button in a message names its action (for example, "Retry upload" or "Re-enter card number").
+- Every call to action, button and instruction must tell the user exactly what to do or what happens next.
+- Every info and error message says what happened and the specific next step, in plain language, except where account privacy requires a generic message (see `references/accounts-and-onboarding.md`).
 - When real content isn't available, use clearly marked placeholders (such as "[Customer quote]").
+- Format displayed dates, numbers and currency following the data display rules in `references/forms-and-data.md`.
 
 ### Do's
 - Include only as much content in each section as is necessary.
-- Use three items only when the real content has exactly three, such as three genuine pricing tiers.
+- Use three items only when the real content has exactly three.
 
 ### Don'ts
-- No em dashes, en dashes used as dashes, or spaced hyphens used as dashes. Use commas, colons, periods or parentheses instead.
+- No em dashes, en dashes used as dashes, or spaced hyphens used as dashes.
 - No half-sentences or sentence fragments for emphasis.
 - No content padded or trimmed to fit a rule of three.
-- No calls to action or instructions that don't tell the user what to do next, such as "Get Started," "Learn More," "Click Here," "Submit," "Continue" (without context) or "Explore."
-- No vague messages such as "Something went wrong" or "An error occurred" without a cause and next step.
+- No banned calls to action, vague messages or writing clichés (lists in `references/writing.md`).
 - No raw error codes or stack traces shown to users.
 - No fake reviews, testimonials, user counts, client logos, statistics or other unsupported claims.
-- No writing clichés, including:
-  - Verbs: unlock, elevate, supercharge, empower, unleash, harness, leverage, revolutionize, transform, streamline, delve, dive in.
-  - Adjectives: seamless, effortless, cutting-edge, next-level, game-changing, best-in-class, world-class, robust, powerful, intuitive.
-  - Phrases: "In today's fast-paced world," "It's not just X, it's Y," "Whether you're X or Y," "Look no further," "Say goodbye to X," "Take X to the next level," "The future of X," "Designed with you in mind," "Your all-in-one X," "Imagine a world where," "At the heart of," "Ready to X?"
 
-## 8. Navigation, Structure and SEO
+## 8. Navigation, Structure and Search
 
 ### Musts
 - The navbar must be mobile compatible.
-- The logo must be clickable and responsive. It links to the home page, or to the dashboard when the user is logged in.
-- Footers and footer links must be functional and professional.
-- The footer includes the copyright year, generated automatically so it never goes stale.
-- Every link must match what its text says and be fully functional for its purpose.
-- Include a custom 404 page that matches the site's design, explains the page wasn't found, links home, and offers site navigation or search. Creative applications may give the message more personality, but it must still include a clear way back.
+- The logo must be clickable and responsive. It links to the home page, or to the dashboard when the user is logged in. When the app lives on a subdomain, the marketing site's logo always goes home and its nav shows a "Sign in" link that sends signed-in users to their dashboard.
+- Footers and footer links must be functional and professional, with the copyright year generated automatically.
+- Every link must match what its text says and be fully functional. Link text must make sense out of context.
+- External links always open in a new tab.
+- Internal links open in the same tab, except links inside a task (such as a form, checkout, sign-up or settings flow) that lead to a non-function page (FAQ, help center, legal pages), which open in a new tab. Links to those pages from the nav, footer or any non-task page open in the same tab.
+- Every link that opens a new tab has `rel="noopener noreferrer"` and a visible icon with accessible text.
+- Include custom error pages that match the site's design and tone: a 404 page (returning a real 404 status) with a link home and navigation or search, a 500 page, and **[Backend]** a 503 maintenance page with `Retry-After`. Creative applications may give them more personality.
 - Use dynamic page titles (such as "Site Name - Page Name").
-- Provide an SVG favicon plus an Apple touch icon.
-- **[Web]** Include meta titles and meta descriptions that accurately reflect each page's content.
-- **[Web] [Public]** Include a sitemap.xml listing every public page.
-- **[Web]** Include a robots.txt that blocks private, account and admin routes from indexing.
+- **[Web]** Use clean URLs: lowercase, hyphenated, descriptive, shallow, with no trailing slash and no file extensions on pages. Standard files and downloads (robots.txt, sitemap.xml, favicon.ico, PDF invoices) keep their extensions.
+- **[Web]** Give every page a canonical tag, and 301-redirect the non-canonical www version and trailing slash URLs in a single step.
+- **[Web]** Unique meta titles (about 60 characters or fewer) and meta descriptions (about 155 or fewer) that accurately reflect each page.
+- **[Web]** Navigation uses real `<a href>` links. Private and utility pages get `noindex`.
+- **[Web] [Public]** Add JSON-LD structured data (never microdata), Open Graph and Twitter Card tags, a sitemap.xml, robots.txt and humans.txt.
+- **[Web] [Accounts or Backend]** Add `/.well-known/security.txt` once a real contact is confirmed.
+- **[Web]** Multilingual sites use `hreflang`, a URL per language and the correct `lang` on every page.
+- Follow `references/web-developer-checklist.md` for every item above.
+
+### Do's
+- Recommend a FAQ page for any application that may benefit from one. Answers come from the builder or are clearly marked placeholders.
+- Add breadcrumbs to any page more than two levels deep.
+- Use subdomains to organize the site where appropriate (rules in `references/web-developer-checklist.md`).
+
+### Don'ts
+- No orphan pages, redirect chains, or important content reachable only behind interactions.
+- No FAQPage or HowTo rich result markup, and no review markup unless real reviews are shown on the page.
+- No placeholders in public machine-readable data (JSON-LD, Open Graph, security.txt). Leave unconfirmed fields out.
+- No automatic language switching by IP address without a visible way to change it.
 
 ## 9. Accessibility and Theming
 
 ### Musts
-- Meet WCAG 2.2 AA contrast: 4.5:1 for body text, 3:1 for large text and UI elements. The high-contrast mode meets AAA (7:1 for body text).
-- Support full keyboard navigation, with a visible solid outline on every focusable element (shadows are not allowed, see Section 1).
+- Meet WCAG 2.2 AA contrast: 4.5:1 for body text, 3:1 for large text and UI elements. The high-contrast mode meets AAA (7:1).
+- Every application must be fully keyboard accessible:
+  - Every interactive element can be reached and used with the keyboard alone, in an order that matches the visual order. Never use a positive `tabindex`.
+  - No keyboard traps. Modals keep focus inside while open and return it to the opener when closed. Escape closes menus, modals and popovers.
+  - Custom widgets follow the WAI-ARIA Authoring Practices keyboard patterns.
+  - Nothing works only on hover.
+  - Every focusable element shows a visible solid outline.
 - Include a "Skip to content" link as the first focusable element.
-- Provide alt text for every meaningful image, and empty alt text (`alt=""`) for decorative ones.
-- Never convey information by color alone. Pair color with text, icons or patterns so colorblind users get the same information.
-- Use semantic HTML and correct ARIA labels so screen readers can navigate the site.
-- Set the `lang` attribute on every page.
-- Provide accessibility options: high-contrast mode, adjustable text size and reduced motion.
-- Accessibility settings follow the device automatically (`prefers-reduced-motion`, `prefers-contrast`, and Windows high-contrast/forced colors), since users rely on them to use the site at all.
-- Default to light mode regardless of the device setting. Provide a toggle to switch to dark mode, and remember the user's choice on return visits.
-- Light mode, dark mode and every accessibility option must work without breaking the layout or styling when toggled.
+- Every page has at least one `<h1>`, and headings follow a logical order without skipping levels.
+- Use semantic elements: lists, real tables with `<th scope>` and `<caption>`, links to navigate and buttons to act, `<address>`, `<figure>` and `<time>` where they apply. **[Web]** Pages pass the W3C Nu HTML Checker with zero errors.
+- **[Web]** Use landmarks: `<header>`, `<nav>`, exactly one `<main>`, `<footer>`, plus `<aside>` and `<search>` where they apply. All content sits inside a landmark, and multiple navs each get a distinct `aria-label`.
+- Prefer native elements over ARIA. Add ARIA only when no native element exists.
+- Provide alt text for every meaningful image, and `alt=""` for decorative ones. Set the `lang` attribute on every page.
+- Never convey information by color alone.
+- Support screen readers (VoiceOver, NVDA, JAWS, TalkBack), zoom to 400% with reflow at 320 px, voice control (visible labels match accessible names) and browser translation tools. Announce dynamic updates through live regions.
+- Provide accessibility options (high-contrast mode, adjustable text size, reduced motion). Device accessibility settings (`prefers-reduced-motion`, `prefers-contrast`, forced colors) apply automatically.
+- Default to light mode regardless of the device setting. Provide a dark mode toggle, and remember the choice in a small essential preference cookie so the server renders the right theme with no flash.
+- Every theme and accessibility option works without breaking the layout or styling.
 
 ## 10. Legal, Privacy and Compliance
 
+Before building legal pages, cookie consent, deletion, messaging or analytics, read `references/legal-and-privacy.md`.
+
 ### Musts
 - **[Data]** Include a privacy policy, terms of service and a data deletion request system.
-- **[Web] [Data]** Include a cookie policy and consent banner whenever the site uses non-essential cookies or trackers. A site using only essential cookies does not show a banner.
-- **[Payments]** Include a refund policy.
-- **[Payments]** Show the full total, including taxes and fees, before the user commits to paying. No hidden fees.
-
-### Legal Page Content
-- At the start of the project, ask the builder whether they want to provide the details needed to complete the legal pages, so they don't have to fill them in manually later. Ask for:
-  - Legal business name, address and contact email.
-  - Countries or regions where the site operates or has users.
-  - Third-party services that receive user data (payments, analytics, email, error monitoring and similar).
-  - Data retention periods.
-  - **[Payments]** Refund window, cancellation terms and dispute process.
-- If the builder does not answer, ask again after the first build is done.
-- Generate every legal page with complete structure and plain-language content, styled to match the site.
-- Fill in only details confirmed by the builder or by the build itself (for example, naming Stripe if the build uses Stripe).
-- Mark every remaining detail as a clearly labeled field, such as "[Company legal name]."
-- List all open fields in the delivery summary and recommend legal review before launch.
-- Never invent business names, addresses, jurisdictions, retention periods or third-party services.
-
-### Cookie Consent
-- **[Web] [Data]** Show the banner as a non-blocking bar at the bottom of the screen, never a modal.
-- Group non-essential cookies into categories (such as analytics, marketing and preferences), each with its own toggle so the user picks which ones to enable.
-- All non-essential categories are off by default.
-- "Accept all," "Reject all" and "Save choices" have equal visual weight.
-- Nothing non-essential loads before the user consents.
-- Include a "Cookie settings" link in the footer so users can change their choices at any time.
-- The cookie policy lists every cookie by name, purpose, category and duration.
-
-### Data Deletion
-- **[Accounts]** Provide a self-serve "Delete my account and data" option in account settings, with a confirmation step.
-- **[Data]** Provide a deletion request form for people without accounts.
-
-### Messaging
-- **[Messaging]** Include an unsubscribe link in every email and text message. Unsubscribing takes one click, requires no login and is honored immediately.
-- **[Messaging]** If the service sends more than one type of message, provide a preferences page where users choose which types they still want, alongside an option to unsubscribe from all.
-- **[Messaging]** Required transactional messages (receipts, password resets, security alerts) are not part of unsubscribe options.
+- **[Web] [Data]** Include a cookie policy and a consent banner whenever non-essential cookies or trackers are used, with a toggle for each category and the choice shared across subdomains.
+- **[Payments]** Include a refund policy, and show the full total, including taxes and fees, before the user commits to paying.
+- Generate legal pages with complete structure, filling in only confirmed details, and never invent business names, addresses, jurisdictions, retention periods or third-party services.
+- **[Accounts]** Account deletion has a 14-day grace period (cancelled by signing back in), keeps only legally required records with personal details removed, and says so on the confirmation and in the privacy policy.
+- **[Messaging]** Every email and text includes a one-click unsubscribe, with per-type preferences when more than one message type is sent. Required transactional messages cannot be unsubscribed from.
+- **[Accounts] [Messaging]** Configure a production email system that reliably delivers password resets, confirmations, sign-in links and security alerts.
+- Add analytics only when they are necessary to the site or improve it, preferring privacy-friendly tools.
 
 ### Don'ts
 - Do not collect unnecessary data. Collect only what a feature requires.
 
 ## 11. Security
 
-Before building any backend, authentication, session or data storage, read `references/supabase-security.md`.
-
-### Default Backend
-- **[Backend]** Use Supabase (Postgres) as the backend in most cases, unless the user specifies otherwise or the project requires something else.
-- **[Backend]** Follow the Supabase security standards in `references/supabase-security.md`.
-- **[Backend]** Logged-out visitors must have no access to any data that would normally require an account.
-- When a different backend is used, apply the equivalent per-user authorization check on every query.
+Before building any backend, authentication, session or data storage, read `references/security.md`.
 
 ### Musts
-- Require authentication and authorization on API endpoints to send a request or return data.
-- Keep API keys and sensitive info on the server, and allow changes only through server-side access.
-- Enforce server-side authority. The server makes the final decision on every action.
-- Protect admin routes and any other permission-restricted content on the server, not only by hiding them in the UI.
-- Add rate limiting and API limits wherever possible, strictest on login, sign-up, password reset and form submissions.
-- Rate-limit every feature that connects to an external API or service (AI, email, SMS, payments, maps and similar), with per-user limits and an overall cap, staying within each provider's limits.
-- Sanitize all user content and submissions to prevent cross-site scripting.
-- Protect every state-changing request (create, update, delete, payments, settings changes) against cross-site request forgery. Use SameSite cookies together with CSRF tokens or Origin header verification on the server.
-- **[Payments]** Verify the signature on every payment webhook and process each event only once.
-- Encrypt sensitive data in transit and at rest, and lock record access.
-- Hash passwords with Argon2id or bcrypt (Supabase Auth handles this by default).
-- Set session cookies as HttpOnly, Secure and SameSite.
-- Force HTTPS.
-- **[Web]** Add security headers: Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, frame-ancestors and Permissions-Policy.
-
-### Data Exposure
-Never expose user data, auth tokens or anything from the application's secure database anywhere a user could find it, including:
-- localStorage, sessionStorage or IndexedDB.
-- URL parameters or query strings.
-- Page source or JavaScript bundles.
-- Console output.
-- Cookies without the HttpOnly flag.
-- Error messages.
-- API responses that return more fields than the screen needs.
-
-Local storage may hold only non-sensitive interface preferences, such as theme choice or a dismissed notice.
-
-### Dependency and Integration Scanning
-- Run the package manager's audit (such as `npm audit`). Fix every high or critical issue, and report any that cannot be fixed.
-- Also treat these as high risk and fix or report them:
-  - Secrets committed to code or config (scan with a tool such as Gitleaks).
-  - Abandoned or unmaintained packages, and packages with suspicious install scripts or names resembling popular packages.
-  - Third-party scripts loaded without Subresource Integrity.
-  - Wildcard CORS (`*`) on authenticated endpoints.
-  - Open redirects.
-  - Public storage buckets holding user files.
-  - OAuth or API permissions broader than the feature needs.
-  - Webhooks without signature verification.
-- Confirm every external API integration works and fails cleanly.
-
-### Never Ship to Production
-- Source maps (.map files), and builds configured to generate them.
-- Exposed source directories, `.git`, `.env` files or server directory listings.
-- `console.log`, `debugger` statements and verbose debug output.
-- Test accounts, seed data, mock data and test API keys.
-- Debug routes, test pages, Storybook and other development tools.
-- Detailed error pages or stack traces.
-- Development builds or unminified bundles.
-- Hardcoded `localhost` URLs.
-- Unfinished features reachable by users.
-- Commented-out code containing credentials or internal details.
+- **[Backend]** Use Supabase (Postgres) in most cases, following the Supabase standards in `references/security.md`, including row-level security on every table. Logged-out visitors have no access to any data that would normally require an account.
+- Require authentication and authorization on API endpoints. Keep API keys and sensitive info on the server, and enforce server-side authority on every action.
+- Protect admin routes and permission-restricted content on the server, not only by hiding them in the UI.
+- Rate-limit everything possible, strictest on sign-in, sign-up, password reset, form submissions, and every feature that calls an external API or sends email or text messages.
+- Sanitize all user content, encode output for its context, and never render user content with `innerHTML` or its framework equivalents without DOMPurify.
+- Protect every state-changing request against cross-site request forgery.
+- **[Payments]** Verify every payment webhook signature and process each event only once.
+- Encrypt sensitive data in transit and at rest. Hash passwords with Argon2id or bcrypt.
+- Set session cookies as HttpOnly, Secure and SameSite, and force HTTPS.
+- **[Web]** Use a strict Content-Security-Policy and the full security header set (details in `references/web-developer-checklist.md`).
+- Never expose user data, tokens or secure database content anywhere a user could find it, including browser storage. Browser storage holds only non-sensitive interface preferences.
+- Guard against the OWASP Top 10 risks, scan dependencies and secrets, and remove everything on the Never Ship list in `references/security.md`.
 
 ## 12. Performance and Reliability
 
 ### Musts
 - Leave no fixable console errors behind.
-- Handle failed requests and API timeouts cleanly on both frontend and backend.
-- Retry only safe requests, with increasing delays and a maximum of three attempts. Then show a clear message with a manual retry option (see Section 7).
+- Handle failed requests and API timeouts cleanly on both frontend and backend. Retry only safe requests, with increasing delays and at most three attempts, then show a clear message with a manual retry option.
 - Prevent memory leaks: clean up event listeners, timers, observers and pending requests when a component or page closes.
-- **[Web]** Meet these targets: Lighthouse 90+ in Performance, Accessibility, Best Practices and SEO, and Core Web Vitals in the "good" range (LCP 2.5 s or less, INP 200 ms or less, CLS 0.1 or less).
-- **[Accounts]** Manage sessions and idle users using the timeout table and logout rules in `references/supabase-security.md`. Private data must never be accessible after logout or session expiry.
+- **[Web]** Score 90+ in Performance, Accessibility and Best Practices on every page, and in SEO on every indexable public page. Measure public pages with PageSpeed Insights (mobile score for mobile, desktop score for desktop) and other pages with Lighthouse. Core Web Vitals stay in the "good" range.
+- **[Web]** Keep first-party initial JavaScript at or under 170 KB compressed, and follow the performance techniques in `references/web-developer-checklist.md`.
+- When the connection drops, show a clear offline message and keep the user's actions in memory until it returns.
+- **[Accounts]** Manage sessions with the idle timeout table and logout rules in `references/security.md`. Private data is never accessible after logout or expiry.
 
 ### Do's
-- Write efficient JS scripts and bundles.
-- Optimize database queries and keep the database clean and organized.
-- Cache repeat requests and handle them cleanly.
-- Self-host fonts and assets where the platform allows. Otherwise, use the permitted source and note it in the delivery summary.
-- Optimize performance as much as possible while maximizing quality across all features.
-- Use the tools in `references/testing-tools.md` to test each area.
-- Sentry is optional for production error monitoring. When used, configure it to strip personal data and list it in the privacy policy.
+- Write efficient scripts and bundles, optimize database queries, cache repeat requests, and self-host assets where the platform allows.
+- Native apps measure performance with platform metrics (Android vitals, Xcode Organizer).
+
+## 13. Web Compatibility and Delivery
+
+Before building any [Web] project, read `references/web-developer-checklist.md`.
+
+### Musts
+- **[Web]** Support the last two versions of Chrome, Edge, Firefox, Safari (macOS and iOS), Samsung Internet, other Chromium-based browsers and Firefox-based browsers, on Windows, macOS, Linux, iOS and Android.
+- **[Web]** Use Browserslist `defaults`, Autoprefixer, `@supports` fallbacks and feature detection. Never detect browsers by user agent.
+- **[Web] [Public]** Public pages display core content and navigation with clean formatting when JavaScript fails to load. Logged-in apps may require JavaScript, with a clean `<noscript>` message.
+- **[Web]** Every page uses `<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">` and respects safe-area insets.
+- **[Web]** Include print styles on every page and dedicated print layouts for receipts, invoices, order confirmations, tickets and legal pages. Printed pages keep consistent formatting when elements are excluded, with no gaps or leftover spacing.
+- **[Web]** Set caching, validation and compression headers and confirm they work on the deployed site.
+- **[Web]** Provide the full favicon set and a web app manifest. Build a full installable PWA only when the user asks for one.
+
+### Don'ts
+- Never disable zoom (`user-scalable=no` or `maximum-scale=1`).
+- No browser-specific features without a fallback.
+
+## 14. Accounts, Sign-In and Onboarding
+
+Before building sign-up, sign-in, onboarding or account pages, read `references/accounts-and-onboarding.md`.
+
+### Musts
+- **[Accounts]** Store each email as entered (for sending) and fully lowercased with a unique constraint (for lookups). Never strip Gmail dots or `+tags` except for duplicate detection in apps where repeat sign-ups are abused.
+- **[Accounts]** Always offer email and password sign-in (plus phone and password when an SMS provider is configured), alongside Google and the other providers that fit the app type.
+- **[Accounts]** Provider buttons follow each provider's official branding and wording, share one size and layout, and request only email and profile scopes. A matching verified email lands in the existing account, never a duplicate.
+- **[Accounts]** Passwords are at least 12 characters, include at least one capital letter, number and symbol, and are checked against known breached passwords.
+- **[Accounts]** Sign-in, sign-up and password reset never reveal whether an account exists.
+- **[Accounts]** Offer two-factor authentication (authenticator app, text message, email code or passkey) in every app with accounts. Require it for admins and for every user in apps handling sensitive data.
+- **[Accounts]** Sign-up shows links to the terms and privacy policy, keeps marketing opt-in as a separate unchecked box, and collects age in onboarding for any sign-up method that skipped it.
+- **[Accounts]** Onboarding is interactive (users do real tasks, never just click through slides), asks only for what the app needs, lets optional steps be skipped, saves progress on the server, and ends with one specific next action. Add multi-step onboarding only when the app needs setup or its first use isn't obvious.
+- **[Accounts]** Provide a dedicated account section, reachable from the user menu on every page, with "Download my data" and account deletion in every app with accounts.
+- **[Accounts]** Cancelling, deleting an account and requesting data deletion each take no more steps than signing up did (one re-authentication and one confirmation don't count), and never require contacting support.
+- **[Accounts]** Email the user about every security change and new-device sign-in.

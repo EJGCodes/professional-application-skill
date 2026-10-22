@@ -6,7 +6,7 @@ Read this before choosing any font. Use a font from the Approved list, a font th
 
 Never use these as a UI, display or body font.
 
-**Original bans:** Inter, Geist, Space Grotesk, and any monospace font (monospace is allowed only to display actual code).
+**Original bans:** Inter, Geist, Space Grotesk, and any monospace font as a UI or display font (monospace is allowed only for actual code and for codes, keys and IDs the user must read or copy).
 
 **Lookalikes:** Inter Tight, Inter Display, Roboto Flex, DM Sans, Manrope, Plus Jakarta Sans, Satoshi, General Sans, Figtree, Outfit, Onest, Instrument Sans, Hanken Grotesk, Albert Sans, Be Vietnam Pro, Sora, Urbanist, Lexend, Geologica, Space Mono, JetBrains Mono, Geist Mono, IBM Plex Mono.
 
@@ -51,4 +51,4 @@ All are open-licensed and work across platforms when self-hosted.
 
 - One main typeface, two maximum only if necessary (for example, a serif for headings with a sans-serif for body text).
 - Self-host font files where the platform allows. In native apps, bundle the font files with the application.
-- When code must be displayed, a monospace font may be used for the code only. Use the platform's default monospace stack rather than a branded code font from the banned list.
+- When code, recovery codes, API keys or IDs must be displayed, a monospace font may be used for them only. Use the platform's default monospace stack rather than a branded code font from the banned list.
